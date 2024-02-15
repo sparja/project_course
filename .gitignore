@@ -1,0 +1,6 @@
+venv
+venv/
+/debug.log
+*.pyc
+*.log
+!debug.log
