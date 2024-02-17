@@ -1,22 +1,34 @@
+
 import json
 from datetime import datetime
 
 
 def open_file():
+    """
+    Функция открывающая файл
+    :return: список json
+    """
     with open('operations.json', 'r', encoding="utf-8") as operation:
         list_operations = json.load(operation)
         return list_operations
 
 
 def main(sorted_transactions_date):
-    for i in sorted_transactions_date[:5]:
-        print(f"{i['date'][8:10]}.{i['date'][5:7]}.{i['date'][:4]} {i['description']}")
-        card_private(i['from'], i['to'])
-        print(f"{i['operationAmount']['amount']} {i['operationAmount']['currency']['name']}")
+    """Основная функция вывода данных"""
+    for transaction in sorted_transactions_date[:5]:
+        print(f"{transaction['date'][8:10]}.{transaction['date'][5:7]}.{transaction['date'][:4]} {transaction['description']}")
+        card_private(transaction['from'], transaction['to'])
+        print(f"{transaction['operationAmount']['amount']} {transaction['operationAmount']['currency']['name']}")
         print()
 
 
 def card_private(number_from, number_to):
+    """
+    Функция преобразования номера счета
+    :param number_from: номер откуда
+    :param number_to: номер куда
+    :return:
+    """
     card_namber = number_from.split()[-1]
     private_number = card_namber[:6] + (len(card_namber[6:-4]) * '*') + card_namber[-4:]
     chunks, chunk_size = len(private_number), len(private_number) // 4
@@ -27,8 +39,13 @@ def card_private(number_from, number_to):
     print(f"{number_to[:len(number_to) - len(number_to_split)]}{len(number_to_split) * '*'}{number_to_split[:-5:-1]}")
 
 
-# Функция для извлечения даты из транзакции
+
 def get_transaction_date(transaction):
+    """
+    Функция для извлечения даты из транзакции
+    :param transaction:
+    :return:
+    """
     if 'from' in transaction:
         return datetime.strptime(transaction['date'], '%Y-%m-%dT%H:%M:%S.%f')
     return None
