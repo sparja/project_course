@@ -46,7 +46,7 @@ def get_transaction_date(transaction):
     :param transaction:
     :return:
     """
-    if 'from' in transaction:
+    if 'from' in transaction and transaction['state'] == 'EXECUTED':
         return datetime.strptime(transaction['date'], '%Y-%m-%dT%H:%M:%S.%f')
     return None
 
