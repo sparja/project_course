@@ -1,4 +1,3 @@
-
 import json
 from datetime import datetime
 
@@ -12,14 +11,6 @@ def open_file():
         list_operations = json.load(operation)
         return list_operations
 
-
-def main(sorted_transactions_date):
-    """Основная функция вывода данных"""
-    for transaction in sorted_transactions_date[:5]:
-        print(f"{transaction['date'][8:10]}.{transaction['date'][5:7]}.{transaction['date'][:4]} {transaction['description']}")
-        card_private(transaction['from'], transaction['to'])
-        print(f"{transaction['operationAmount']['amount']} {transaction['operationAmount']['currency']['name']}")
-        print()
 
 
 def card_private(number_from, number_to):
@@ -36,7 +27,7 @@ def card_private(number_from, number_to):
 
     print(f'{number_from[:len(number_from) - len(card_namber)]}', end='')
     print(" ".join([private_number[i:i + chunk_size] for i in range(0, chunks, chunk_size)]), end=' --> ')
-    print(f"{number_to[:len(number_to) - len(number_to_split)]}{len(number_to_split) * '*'}{number_to_split[:-5:-1]}")
+    print(f"{number_to[:len(number_to) - len(number_to_split)]} {len(number_to_split[-4:-2]) * '*'}{number_to_split[:-5:-1]}")
 
 
 
@@ -51,11 +42,15 @@ def get_transaction_date(transaction):
     return None
 
 
-# Сортировка операций по дате в убывающем порядке
-sorted_transactions = sorted(
-    [transaction for transaction in open_file() if get_transaction_date(transaction) is not None],
-    key=get_transaction_date, reverse=True)
+def sort_data():
+    """
+    Сортировка операций по дате в убывающем порядке
+    :return:
+    """
+    sorted_transactions = sorted(
+        [transaction for transaction in open_file() if get_transaction_date(transaction) is not None],
+        key=get_transaction_date, reverse=True)
+
+    return sorted_transactions
 
 
-if __name__ == '__main__':
-    main(sorted_transactions)
