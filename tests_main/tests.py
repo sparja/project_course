@@ -1,11 +1,44 @@
 from datetime import datetime
 
 import pytest
-from project.func import open_file, get_transaction_date, sort_data
+from project.func import get_transaction_date, card_private_from, card_private_to
 
 
+def test_card_private_from():
+    """
+    Тест для номера счета !="Счет"
+    :return:
+    """
+    sorted_transactions = {'from': 'Maestro 1596837868705199'}
+    result = card_private_from(sorted_transactions)
+    assert result == 'Maestro 1596 83** **** 5199'
 
+def test_card_private_from_():
+    """
+    Тест для номера счета 'Счет'
+    :return:
+    """
+    sorted_transactions = {'from': 'Счет 1234567891234567'}
+    result = card_private_from(sorted_transactions)
+    assert result == 'Счет **4567'
 
+def test_card_private_to():
+    """
+    Тест для номера счета !="Счет"
+    :return:
+    """
+    sorted_transactions = {'to': 'Maestro 1596837868705199'}
+    result = card_private_to(sorted_transactions)
+    assert result == 'Maestro 1596 83** **** 5199'
+
+def test_card_private_to_():
+    """
+    Тест для номера счета 'Счет'
+    :return:
+    """
+    sorted_transactions = {'to': 'Счет 1234567891234567'}
+    result = card_private_to(sorted_transactions)
+    assert result == 'Счет **4567'
 
 def test_get_transaction_date():
     """
