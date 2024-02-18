@@ -12,23 +12,33 @@ def open_file():
         return list_operations
 
 
-
-def card_private(number_from, number_to):
+def card_private_from(sorted_transactions):
     """
     Функция преобразования номера счета
-    :param number_from: номер откуда
-    :param number_to: номер куда
-    :return:
+    :param sorted_transactions: Сортированный список
+    :return: Вернет перобразованный номер
     """
-    card_namber = number_from.split()[-1]
-    private_number = card_namber[:6] + (len(card_namber[6:-4]) * '*') + card_namber[-4:]
-    chunks, chunk_size = len(private_number), len(private_number) // 4
-    number_to_split = number_to.split()[-1]
+    number_from = sorted_transactions['from']
+    number_from_split = number_from.split(" ")[-1]
+    if "Счет" in sorted_transactions['from']:
+        return f"{number_from[:len(number_from) - len(number_from_split)] + '**' + number_from_split[-4:]}"
 
-    print(f'{number_from[:len(number_from) - len(card_namber)]}', end='')
-    print(" ".join([private_number[i:i + chunk_size] for i in range(0, chunks, chunk_size)]), end=' --> ')
-    print(f"{number_to[:len(number_to) - len(number_to_split)]} {len(number_to_split[-4:-2]) * '*'}{number_to_split[:-5:-1]}")
+    return number_from[:len(number_from) - len(number_from_split)] + number_from_split[:4] \
+        + " " + number_from_split[4:6] + '*' * 2 + " " + '****' + " " + number_from_split[-4:]
 
+
+def card_private_to(sorted_transactions):
+    """
+    Функция преобразования номера счета
+    :param sorted_transactions: Сортированный список
+    :return: Вернет перобразованный номер
+    """
+    number_to = sorted_transactions['to']
+    number_to_split = number_to.split(" ")[-1]
+    if "Счет" in sorted_transactions['to']:
+        return f"{number_to[:len(number_to) - len(number_to_split)] + '**' + number_to_split[-4:]}"
+    return number_to[:len(number_to) - len(number_to_split)] + number_to_split[:4] \
+        + " " + number_to_split[4:6] + '*' * 2 + " " + '****' + " " + number_to_split[-4:]
 
 
 def get_transaction_date(transaction):
@@ -52,5 +62,8 @@ def sort_data():
         key=get_transaction_date, reverse=True)
 
     return sorted_transactions
+
+
+
 
 
